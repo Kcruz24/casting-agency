@@ -1,3 +1,5 @@
+import os
+
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
@@ -12,11 +14,13 @@ database_path = "postgresql://{}:{}@{}/{}".format(database_username,
                                                   database_name)
 
 db = SQLAlchemy()
+SECRET_KEY = os.urandom(32)
 
 
 def setup_db(app, db_path=database_path):
     app.config["SQLALCHEMY_DATABASE_URI"] = db_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config['SECRET_KEY'] = SECRET_KEY
     db.app = app
     db.init_app(app)
     db.create_all()
