@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Actors</title>
+</head>
+<body>
+    <h1>Showing all Actors available!</h1>
+
+    {% for actor in actors %}
+        <ul>
+            <li>{{ actor.name }}, {{ actor.age }} years old.</li>
+        </ul>
+    {% endfor %}
+
+    <h5><a href="/">Back</a></h5>
+</body>
+</html>
