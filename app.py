@@ -1,14 +1,20 @@
 import os
+import sys
 
-from flask import Flask, render_template
+from flask import Flask, render_template, flash, redirect, abort, request
 from flask_cors import CORS
+
+from backend.database.models.actor import Actor
+from backend.database.models.movie import Movie
+from backend.database.setup import setup_db
+from backend.forms.actor_form import ActorForm
 
 
 def create_app(test_config=None):
     # create and configure the app
     template_dir = os.path.abspath('frontend/templates')
     app = Flask(__name__, template_folder=template_dir)
-    # setup_db(app)
+    setup_db(app)
 
     CORS(app, resources={r"*": {"origins": "*"}})
 
@@ -23,7 +29,49 @@ def create_app(test_config=None):
         return res
 
     @app.route('/')
-    def hello_world():  # put application's code here
+    def home():
         return render_template('index.html')
+
+    @app.route('/actors')
+    def actors():
+        get_actors = Actor.query.all()
+
+        return render_template('pages/actors.html', actors=get_actors)
+
+    @app.route('/movies')
+    def movies():
+        get_movies = Movie.query.all()
+
+        return render_template('pages/movies.html', movies=get_movies)
+
+    @app.route('/actors/create', methods=['GET', 'POST'])
+    def create_actor_submission():
+
+        if request.method == 'GET':
+            form = ActorForm()
+
+            return render_template('forms/new_actor.html', form=form)
+
+        error = False
+        form = ActorForm()
+
+        if form.validate_on_submit():
+            try:
+                new_actor = Actor()
+                form.populate_obj(new_actor)
+
+                new_actor.insert()
+
+                flash(f'{new_actor.name} was successfully created!')
+            except():
+                error = True
+                print(sys.exc_info())
+                flash(
+                    'Something went wrong when trying to create a new actor!')
+
+            if not error:
+                return redirect('/actors')
+            else:
+                abort(500)
 
     return app
