@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+</head>
+<body>
+    <h1>Movie releases</h1>
+
+    {% for movie in movies %}
+    <ul>
+        <li>{{ movie.title }} - {{ movie.release_date }}</li>
+    </ul>
+    {% endfor %}
+
+    <h5><a href="/">Back</a></h5>
+</body>
+</html>
