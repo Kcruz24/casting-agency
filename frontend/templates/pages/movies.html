@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Movies</title>
-</head>
-<body>
+{% extends 'layouts/main.html' %}
+{% block title %} Movies {% endblock %}
+{% block content %}
     <h1>Movie releases</h1>
 
     {% for movie in movies %}
@@ -14,5 +10,4 @@
     {% endfor %}
 
     <h5><a href="/">Back</a></h5>
-</body>
-</html>
+{% endblock %}

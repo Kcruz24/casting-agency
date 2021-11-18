@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Test</title>
-</head>
-<body>
+{% extends 'layouts/main.html' %}
+{% block title %} Home {% endblock %}
+{% block content %}
     <h1>Welcome to the Casting Agency</h1>
 
     <h3>Where do you want to go?</h3>
@@ -16,6 +12,9 @@
         <li>
             <a href="/movies">movies page</a>
         </li>
+
+        <li>
+            <a href="/actors/create">create new actor</a>
+        </li>
     </ul>
-</body>
-</html>
+{% endblock %}
