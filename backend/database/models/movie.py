@@ -4,7 +4,7 @@ from sqlalchemy import Column, Integer, String, Date
 db = SQLAlchemy()
 
 
-class Movies(db.Model):
+class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = Column(Integer, primary_key=True)
