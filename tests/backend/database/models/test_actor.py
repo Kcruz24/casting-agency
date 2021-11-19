@@ -34,10 +34,10 @@ class TestActor(TestCase):
             self.db.create_all()
 
     def test_actor_created(self):
-        actor = Actor(name='Kevin', age=22, gender='male')
+        actor = Actor(name='Diego', age=21, gender='male')
         actor.insert()
 
-        actor_from_db = Actor.query.filter(Actor.name == 'Kevin').one()
+        actor_from_db = Actor.query.filter(Actor.name == 'Diego').one()
 
         self.assertTrue(isinstance(actor, Actor))
         self.assertTrue(actor_from_db)
