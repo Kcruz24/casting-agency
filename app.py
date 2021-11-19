@@ -1,7 +1,8 @@
 import os
 import sys
 
-from flask import Flask, render_template, flash, redirect, abort, request
+from flask import Flask, render_template, flash, redirect, abort, request, \
+    jsonify
 from flask_cors import CORS
 
 from backend.database.models.actor import Actor
@@ -30,19 +31,44 @@ def create_app(test_config=None):
 
     @app.route('/')
     def home():
-        return render_template('index.html')
+        return jsonify({
+            'success': True,
+            'home_route': True
+        })
 
     @app.route('/actors')
     def actors():
-        get_actors = Actor.query.all()
+        try:
+            get_actors = Actor.query.order_by(Actor.id).all()
+            format_actors = [actor.format() for actor in get_actors]
 
-        return render_template('pages/actors.html', actors=get_actors)
+            if len(get_actors) == 0:
+                abort(404)
+
+            return jsonify({
+                'success': True,
+                'actors': format_actors,
+                'all_actors': len(get_actors)
+            })
+        except():
+            abort(500)
 
     @app.route('/movies')
     def movies():
-        get_movies = Movie.query.all()
+        try:
+            get_movies = Movie.query.all()
+            format_movies = [movie.format() for movie in get_movies]
 
-        return render_template('pages/movies.html', movies=get_movies)
+            if len(get_movies) == 0:
+                abort(404)
+
+            return jsonify({
+                'success': True,
+                'movies': format_movies,
+                'all_movies': len(get_movies)
+            })
+        except():
+            abort(500)
 
     @app.route('/actors/create', methods=['GET', 'POST'])
     def create_actor_submission():
