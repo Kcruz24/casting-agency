@@ -71,33 +71,42 @@ def create_app(test_config=None):
             abort(500)
 
     @app.route('/actors/create', methods=['GET', 'POST'])
-    def create_actor_submission():
+    def create_actor():
 
         if request.method == 'GET':
-            form = ActorForm()
-
-            return render_template('forms/new_actor.html', form=form)
+            return jsonify({
+                'success': True,
+                'request_method': request.method
+            })
 
         error = False
-        form = ActorForm()
 
-        if form.validate_on_submit():
-            try:
-                new_actor = Actor()
-                form.populate_obj(new_actor)
+        body = request.get_json()
 
-                new_actor.insert()
+        get_name = body.get('name', None)
+        get_age = body.get('age', None)
+        get_gender = body.get('gender', None)
 
-                flash(f'{new_actor.name} was successfully created!')
-            except():
-                error = True
-                print(sys.exc_info())
-                flash(
-                    'Something went wrong when trying to create a new actor!')
+        new_actor = None
 
-            if not error:
-                return redirect('/actors')
-            else:
-                abort(500)
+        try:
+            new_actor = Actor(name=get_name, age=get_age, gender=get_gender)
+            new_actor.insert()
+
+            flash(f'{new_actor.name} was successfully created!')
+        except():
+            error = True
+            print(sys.exc_info())
+            flash(
+                'Something went wrong when trying to create a new actor!')
+
+        if not error:
+            return jsonify({
+                'success': True,
+                'created': new_actor.id,
+                'new_actor': new_actor.format()
+            })
+        else:
+            abort(500)
 
     return app
