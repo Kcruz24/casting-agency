@@ -119,4 +119,25 @@ def create_app(test_config=None):
             })
         except():
             abort(422)
+
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+    def delete_actor(actor_id):
+
+        try:
+            all_actors_before_delete = Actor.query.all()
+            deleted_actor = Actor.query.get_or_404(actor_id)
+
+            deleted_actor.delete()
+
+            all_actors_after_delete = Actor.query.all()
+
+            return jsonify({
+                'success': True,
+                'deleted_actor_id': deleted_actor.id,
+                'deleted_actor': deleted_actor.format(),
+                'number_of_actors_before': len(all_actors_before_delete),
+                'number_of_actors_after': len(all_actors_after_delete)
+            })
+        except():
+            abort(422)
     return app
