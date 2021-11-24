@@ -239,4 +239,12 @@ def create_app(test_config=None):
             'error': 500,
             'message': 'Internal Server Error'
         }), 500
+
+    @app.errorhandler(404)
+    def resource_not_found(error):
+        return jsonify({
+            'success': False,
+            'error': 404,
+            'message': 'Resource Not Found'
+        }), 404
     return app
