@@ -36,18 +36,18 @@ def create_app(test_config=None):
         })
 
     @app.route('/actors')
-    def actors():
+    def get_actors():
         try:
-            get_actors = Actor.query.order_by(Actor.id).all()
-            format_actors = [actor.format() for actor in get_actors]
+            all_actors = Actor.query.order_by(Actor.id).all()
+            format_actors = [actor.format() for actor in all_actors]
 
-            if len(get_actors) == 0:
+            if len(all_actors) == 0:
                 abort(404)
 
             return jsonify({
                 'success': True,
                 'actors': format_actors,
-                'all_actors': len(get_actors)
+                'all_actors': len(all_actors)
             })
         except():
             abort(500)
