@@ -159,4 +159,24 @@ def create_app(test_config=None):
             })
         except():
             abort(500)
+
+    @app.route('/movies', methods=['POST'])
+    def post_movies():
+
+        body = request.get_json()
+
+        get_title = body.get('title')
+        get_release_date = body.get('release_date')
+
+        try:
+            new_movie = Movie(title=get_title, release_date=get_release_date)
+            new_movie.insert()
+
+            return jsonify({
+                'success': True,
+                'new_movie': new_movie.format(),
+                'created_id': new_movie.id
+            })
+        except():
+            abort(422)
     return app
