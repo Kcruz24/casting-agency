@@ -5,6 +5,7 @@ from flask import Flask, flash, abort, request, \
     jsonify
 from flask_cors import CORS
 
+from backend.auth.auth import requires_auth
 from backend.database.models.actor import Actor
 from backend.database.models.movie import Movie
 from backend.database.setup import setup_db
@@ -35,6 +36,7 @@ def create_app(test_config=None):
             'home_route': True
         })
 
+    @requires_auth('get:actors')
     @app.route('/actors')
     def get_actors():
         try:
@@ -52,6 +54,7 @@ def create_app(test_config=None):
         except():
             abort(500)
 
+    @requires_auth('post:actors')
     @app.route('/actors', methods=['POST'])
     def post_actors():
 
@@ -85,6 +88,7 @@ def create_app(test_config=None):
         else:
             abort(500)
 
+    @requires_auth('patch:actors')
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     def patch_actor(actor_id):
 
@@ -120,6 +124,7 @@ def create_app(test_config=None):
         except():
             abort(422)
 
+    @requires_auth('delete:actors')
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     def delete_actor(actor_id):
 
@@ -143,6 +148,7 @@ def create_app(test_config=None):
 
     # ##################### MOVIES #####################
 
+    @requires_auth('get:movies')
     @app.route('/movies')
     def get_movies():
         try:
@@ -160,6 +166,7 @@ def create_app(test_config=None):
         except():
             abort(500)
 
+    @requires_auth('post:movies')
     @app.route('/movies', methods=['POST'])
     def post_movies():
 
@@ -180,6 +187,7 @@ def create_app(test_config=None):
         except():
             abort(422)
 
+    @requires_auth('patch:movies')
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     def patch_movie(movie_id):
 
@@ -210,6 +218,7 @@ def create_app(test_config=None):
         except():
             abort(422)
 
+    @requires_auth('delete:movies')
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     def delete_movie(movie_id):
 
@@ -263,4 +272,5 @@ def create_app(test_config=None):
             'error': 405,
             'message': 'Method Not Allowed'
         }), 405
+
     return app
