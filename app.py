@@ -85,4 +85,38 @@ def create_app(test_config=None):
         else:
             abort(500)
 
+    @app.route('/actors/<int:actor_id>', methods=['PATCH'])
+    def patch_actor(actor_id):
+
+        try:
+            actor = Actor.query.get_or_404(actor_id)
+            old_actor = actor
+            old_actor_formatted = actor.format()
+
+            body = request.get_json()
+
+            if body.get('name') is None:
+                actor.name = old_actor.name
+            else:
+                actor.name = body.get('name')
+
+            if body.get('age') is None:
+                actor.age = old_actor.age
+            else:
+                actor.age = body.get('age')
+
+            if body.get('gender') is None:
+                actor.gender = old_actor.gender
+            else:
+                actor.gender = body.get('gender')
+
+            actor.update()
+
+            return jsonify({
+                'success': True,
+                'actor_before': old_actor_formatted,
+                'modified_actor': actor.format(),
+            })
+        except():
+            abort(422)
     return app
