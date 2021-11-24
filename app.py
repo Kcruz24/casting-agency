@@ -1,14 +1,13 @@
 import os
 import sys
 
-from flask import Flask, render_template, flash, redirect, abort, request, \
+from flask import Flask, flash, abort, request, \
     jsonify
 from flask_cors import CORS
 
 from backend.database.models.actor import Actor
 from backend.database.models.movie import Movie
 from backend.database.setup import setup_db
-from backend.forms.actor_form import ActorForm
 
 
 def create_app(test_config=None):
