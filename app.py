@@ -179,4 +179,34 @@ def create_app(test_config=None):
             })
         except():
             abort(422)
+
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    def patch_movie(movie_id):
+
+        try:
+            movie = Movie.query.get_or_404(movie_id)
+            old_movie = movie
+            old_movie_formatted = old_movie.format()
+
+            body = request.get_json()
+
+            if body.get('title') is None:
+                movie.title = old_movie.title
+            else:
+                movie.title = body.get('title')
+
+            if body.get('release_date') is None:
+                movie.release_date = old_movie.release_date
+            else:
+                movie.release_date = body.get('release_date')
+
+            movie.update()
+
+            return jsonify({
+                'success': True,
+                'old_movie': old_movie_formatted,
+                'modified_movie': movie.format()
+            })
+        except():
+            abort(422)
     return app
