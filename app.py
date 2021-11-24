@@ -209,4 +209,24 @@ def create_app(test_config=None):
             })
         except():
             abort(422)
+
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    def delete_movie(movie_id):
+
+        try:
+            all_movies_before_delete = Movie.query.all()
+
+            deleted_movie = Movie.query.get_or_404(movie_id)
+            deleted_movie.delete()
+
+            all_movies_after_delete = Movie.query.all()
+
+            return jsonify({
+                'success': True,
+                'deleted_movie': deleted_movie.format(),
+                'number_of_movies_before': len(all_movies_before_delete),
+                'number_of_movies_after': len(all_movies_after_delete)
+            })
+        except():
+            abort(422)
     return app
