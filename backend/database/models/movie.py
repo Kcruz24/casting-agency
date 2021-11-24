@@ -23,8 +23,8 @@ class Movie(db.Model):
     def update():
         db.session.commit()
 
-    def remove(self):
-        db.session.remove(self)
+    def delete(self):
+        db.session.delete(self)
         db.session.commit()
 
     def format(self):
