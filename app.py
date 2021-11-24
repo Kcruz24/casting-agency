@@ -52,31 +52,8 @@ def create_app(test_config=None):
         except():
             abort(500)
 
-    @app.route('/movies')
-    def movies():
-        try:
-            get_movies = Movie.query.all()
-            format_movies = [movie.format() for movie in get_movies]
-
-            if len(get_movies) == 0:
-                abort(404)
-
-            return jsonify({
-                'success': True,
-                'movies': format_movies,
-                'all_movies': len(get_movies)
-            })
-        except():
-            abort(500)
-
-    @app.route('/actors/create', methods=['GET', 'POST'])
-    def create_actor():
-
-        if request.method == 'GET':
-            return jsonify({
-                'success': True,
-                'request_method': request.method
-            })
+    @app.route('/actors', methods=['POST'])
+    def post_actors():
 
         error = False
 
