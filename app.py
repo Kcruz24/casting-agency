@@ -140,4 +140,23 @@ def create_app(test_config=None):
             })
         except():
             abort(422)
+
+    # ##################### MOVIES #####################
+
+    @app.route('/movies')
+    def get_movies():
+        try:
+            all_movies = Movie.query.all()
+            format_movies = [movie.format() for movie in all_movies]
+
+            if len(all_movies) == 0:
+                abort(404)
+
+            return jsonify({
+                'success': True,
+                'movies': format_movies,
+                'all_movies': len(all_movies)
+            })
+        except():
+            abort(500)
     return app
