@@ -57,7 +57,7 @@ class TestActorEndpoints(TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource Not Found')
 
-    # ##################### ACTORS TESTS #####################
+    # ##################### ACTORS TESTS WITHOUT AUTH #####################
 
     def test_get_actors(self):
         res = self.client().get('/actors')
