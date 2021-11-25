@@ -15,7 +15,6 @@ class TestActorEndpoints(TestCase):
 
     def setUp(self):
         self.app = create_app()
-        # self.app.app_context().push()
         self.client = self.app.test_client
 
         self.db_username = 'postgres'
