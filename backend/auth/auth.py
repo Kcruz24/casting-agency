@@ -39,10 +39,12 @@ def get_token_auth_header():
         }, 401)
 
     token = auth_header_split[1]
+    print('Passed get_token_auth_header')
     return token
 
 
 def check_permissions(permission, payload):
+    print('getting into check_permissions')
     if 'permissions' not in payload:
         raise AuthError({
             'code': 'invalid_claims',
@@ -55,12 +57,16 @@ def check_permissions(permission, payload):
             'description': 'Permission not found'
         }, 403)
 
+    print('Passed check_permissions')
+
 
 def verify_decode_jwt(token):
     json_url = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(json_url.read())
+    print('This is jwks:', jwks)
 
     unverified_header = jwt.get_unverified_header(token)
+    print('Unverified header:', unverified_header)
 
     rsa_key = {}
     if 'kid' not in unverified_header:
@@ -91,6 +97,8 @@ def verify_decode_jwt(token):
 
             for key, value in payload.items():
                 print(key, ': ', value)
+
+            print('Passed verify_decode_jwt')
 
             return payload
 
@@ -126,8 +134,11 @@ def requires_auth(permission=''):
         def wrapper(*args, **kwargs):
             jwt = get_token_auth_header()
             try:
+                print('trying')
                 payload = verify_decode_jwt(jwt)
+                print('Payload!', payload)
             except:
+                print('Aborted!')
                 abort(401)
 
             check_permissions(permission, payload)
