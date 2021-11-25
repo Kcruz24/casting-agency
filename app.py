@@ -36,9 +36,9 @@ def create_app(test_config=None):
             'home_route': True
         })
 
-    @requires_auth('get:actors')
     @app.route('/actors')
-    def get_actors():
+    @requires_auth('get:actors')
+    def get_actors(jwt):
         try:
             all_actors = Actor.query.order_by(Actor.id).all()
             format_actors = [actor.format() for actor in all_actors]
@@ -54,9 +54,9 @@ def create_app(test_config=None):
         except():
             abort(500)
 
-    @requires_auth('post:actors')
     @app.route('/actors', methods=['POST'])
-    def post_actors():
+    @requires_auth('post:actors')
+    def post_actors(jwt):
 
         error = False
 
@@ -88,9 +88,9 @@ def create_app(test_config=None):
         else:
             abort(500)
 
-    @requires_auth('patch:actors')
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-    def patch_actor(actor_id):
+    @requires_auth('patch:actors')
+    def patch_actor(jwt, actor_id):
 
         try:
             actor = Actor.query.get_or_404(actor_id)
@@ -124,9 +124,9 @@ def create_app(test_config=None):
         except():
             abort(422)
 
-    @requires_auth('delete:actors')
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-    def delete_actor(actor_id):
+    @requires_auth('delete:actors')
+    def delete_actor(jwt, actor_id):
 
         try:
             all_actors_before_delete = Actor.query.all()
@@ -148,9 +148,9 @@ def create_app(test_config=None):
 
     # ##################### MOVIES #####################
 
-    @requires_auth('get:movies')
     @app.route('/movies')
-    def get_movies():
+    @requires_auth('get:movies')
+    def get_movies(jwt):
         try:
             all_movies = Movie.query.all()
             format_movies = [movie.format() for movie in all_movies]
@@ -166,9 +166,9 @@ def create_app(test_config=None):
         except():
             abort(500)
 
-    @requires_auth('post:movies')
     @app.route('/movies', methods=['POST'])
-    def post_movies():
+    @requires_auth('post:movies')
+    def post_movies(jwt):
 
         body = request.get_json()
 
@@ -187,9 +187,9 @@ def create_app(test_config=None):
         except():
             abort(422)
 
-    @requires_auth('patch:movies')
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    def patch_movie(movie_id):
+    @requires_auth('patch:movies')
+    def patch_movie(jwt, movie_id):
 
         try:
             movie = Movie.query.get_or_404(movie_id)
@@ -218,9 +218,9 @@ def create_app(test_config=None):
         except():
             abort(422)
 
-    @requires_auth('delete:movies')
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-    def delete_movie(movie_id):
+    @requires_auth('delete:movies')
+    def delete_movie(jwt, movie_id):
 
         try:
             all_movies_before_delete = Movie.query.all()
