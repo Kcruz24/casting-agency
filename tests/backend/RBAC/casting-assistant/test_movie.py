@@ -5,13 +5,12 @@ from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
 from app import create_app
-from backend.database.models.actor import Actor
 from backend.database.setup import setup_db
 
 db_password = config('PASSWORD')
 
 
-class TestCastingAssistantRoleActorsEndpoints(TestCase):
+class TestCastingAssistantRoleMoviesEndpoints(TestCase):
 
     def setUp(self):
         self.app = create_app()
@@ -63,8 +62,9 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('Data:', data)
 
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['code'], 'Authorization not present in headers')
-        self.assertEqual(data['description'],
+        self.assertEqual(data['message']['code'],
+                         'Authorization not present in headers')
+        self.assertEqual(data['message']['description'],
                          'Unable to get authorization from header')
 
     def test_401_header_malformed(self):
@@ -77,9 +77,9 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('DATA HERE', data)
 
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['code'], 'header_malformed')
-        self.assertEqual(data['description'], 'Authorization header length '
-                                              'not equal to 2')
+        self.assertEqual(data['message']['code'], 'header_malformed')
+        self.assertEqual(data['message']['description'],
+                         'Authorization header length not equal to 2')
 
     def test_401_bearer_keyword_not_found(self):
         res = self.client().get('/movies',
@@ -91,10 +91,10 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('DATA HERE', data)
 
         self.assertEqual(res.status_code, 401)
-        self.assertEqual(data['code'], 'bearer keyword not found')
-        self.assertEqual(data['description'], 'The bearer keyword was not '
-                                              'found in the authorization '
-                                              'header')
+        self.assertEqual(data['message']['code'], 'bearer keyword not found')
+        self.assertEqual(data['message']['description'],
+                         'The bearer keyword was not found in the '
+                         'authorization header')
 
     def test_403_cant_create_movie(self):
         res = self.client().post('/movies',
@@ -106,8 +106,8 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
-        self.assertEqual(data['code'], 'Forbidden')
-        self.assertEqual(data['description'], 'Permission not found')
+        self.assertEqual(data['message']['code'], 'Forbidden')
+        self.assertEqual(data['message']['description'], 'Permission not found')
 
     def test_403_cant_modify_movie(self):
         res = self.client().patch('/movies/6',
@@ -119,8 +119,8 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
-        self.assertEqual(data['code'], 'Forbidden')
-        self.assertEqual(data['description'], 'Permission not found')
+        self.assertEqual(data['message']['code'], 'Forbidden')
+        self.assertEqual(data['message']['description'], 'Permission not found')
 
     def test_403_cant_delete_movie(self):
         res = self.client().delete('/movies/6',
@@ -131,5 +131,5 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
-        self.assertEqual(data['code'], 'Forbidden')
-        self.assertEqual(data['description'], 'Permission not found')
+        self.assertEqual(data['message']['code'], 'Forbidden')
+        self.assertEqual(data['message']['description'], 'Permission not found')
