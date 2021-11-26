@@ -5,7 +5,7 @@ from flask import Flask, flash, abort, request, \
     jsonify
 from flask_cors import CORS
 
-from backend.auth.auth import requires_auth
+from backend.auth.auth import requires_auth, AuthError
 from backend.database.models.actor import Actor
 from backend.database.models.movie import Movie
 from backend.database.setup import setup_db
@@ -280,5 +280,15 @@ def create_app(test_config=None):
             'error': 401,
             'message': 'Unauthorized'
         }), 401
+
+    @app.errorhandler(AuthError)
+    def server_error(error):
+        print('LOOK HERE', error)
+        print('Status', error.status_code)
+        return jsonify({
+            'success': False,
+            'error': error.status_code,
+            'message': error.error
+        }), error.status_code
 
     return app
