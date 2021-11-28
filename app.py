@@ -236,7 +236,7 @@ def create_app(test_config=None):
                 'number_of_movies_before': len(all_movies_before_delete),
                 'number_of_movies_after': len(all_movies_after_delete)
             })
-        except():
+        except:
             abort(422)
 
     # ##################### ERROR HANDLERS #####################
@@ -273,18 +273,8 @@ def create_app(test_config=None):
             'message': 'Method Not Allowed'
         }), 405
 
-    @app.errorhandler(401)
-    def unauthorized(error):
-        return jsonify({
-            'success': False,
-            'error': 401,
-            'message': 'Unauthorized'
-        }), 401
-
     @app.errorhandler(AuthError)
     def server_error(error):
-        print('LOOK HERE', error)
-        print('Status', error.status_code)
         return jsonify({
             'success': False,
             'error': error.status_code,
