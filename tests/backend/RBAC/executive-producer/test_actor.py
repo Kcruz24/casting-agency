@@ -32,7 +32,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
             'gender': 'male'
         }
 
-        self.casting_director_token = config('EXECUTIVE_PRODUCER_TOKEN')
+        self.executive_producer_token = config('EXECUTIVE_PRODUCER_TOKEN')
 
         setup_db(self.app, self.database_path)
 
@@ -44,7 +44,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_can_view_actors(self):
         res = self.client().get('/actors',
                                 headers={'Authorization': 'Bearer {}'.format(
-                                    self.casting_director_token)
+                                    self.executive_producer_token)
                                 })
         data = json.loads(res.data)
 
@@ -56,7 +56,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_404_actors_not_found(self):
         res = self.client().get('/actor',
                                 headers={'Authorization': 'Bearer {}'.format(
-                                    self.casting_director_token)
+                                    self.executive_producer_token)
                                 })
         data = json.loads(res.data)
 
@@ -67,7 +67,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_can_create_actor(self):
         res = self.client().post('/actors',
                                  headers={'Authorization': 'Bearer {}'.format(
-                                     self.casting_director_token)
+                                     self.executive_producer_token)
                                  }, json=self.actor)
         data = json.loads(res.data)
 
@@ -82,7 +82,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_405_cannot_create_actor(self):
         res = self.client().post('/actors/3',
                                  headers={'Authorization': 'Bearer {}'.format(
-                                     self.casting_director_token)
+                                     self.executive_producer_token)
                                  }, json=self.actor)
         data = json.loads(res.data)
 
@@ -94,7 +94,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
         name_replacement = 'exec producer'
         res = self.client().patch('/actors/30',
                                   headers={'Authorization': 'Bearer {}'.format(
-                                      self.casting_director_token)
+                                      self.executive_producer_token)
                                   }, json={'name': f'{name_replacement}'})
         data = json.loads(res.data)
 
@@ -109,7 +109,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_404_modify_if_actor_does_not_exist(self):
         res = self.client().patch('/actors/10000',
                                   headers={'Authorization': 'Bearer {}'.format(
-                                      self.casting_director_token)
+                                      self.executive_producer_token)
                                   }, json={'name': ' director'})
         data = json.loads(res.data)
 
@@ -120,7 +120,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_can_delete_actors(self):
         res = self.client().delete('/actors/28',
                                    headers={'Authorization': 'Bearer {}'.format(
-                                       self.casting_director_token)
+                                       self.executive_producer_token)
                                    })
         data = json.loads(res.data)
 
@@ -137,7 +137,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
     def test_404_delete_if_actor_does_not_exist(self):
         res = self.client().delete('/actors/1000',
                                    headers={'Authorization': 'Bearer {}'.format(
-                                       self.casting_director_token)
+                                       self.executive_producer_token)
                                    })
         data = json.loads(res.data)
 
