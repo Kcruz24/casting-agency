@@ -56,6 +56,17 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         self.assertTrue(data['all_actors'])
         self.assertTrue(len(data['actors']))
 
+    def test_404_actors_not_found(self):
+        res = self.client().get('/actor',
+                                headers={'Authorization': 'Bearer {}'.format(
+                                    self.casting_assistant_token)
+                                })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertEqual(data['success'], False)
+        self.assertEqual(data['message'], 'Resource Not Found')
+
     def test_401_authorization_not_present_in_headers(self):
         res = self.client().get('/actors')
         data = json.loads(res.data)
@@ -64,6 +75,7 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('Status code test', res.status_code)
         print('Data code', data['message']['code'])
         self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'],
                          'Authorization not present in headers')
         self.assertEqual(data['message']['description'],
@@ -79,6 +91,7 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('DATA HERE', data)
 
         self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'header_malformed')
         self.assertEqual(data['message']['description'],
                          'Authorization header length '
@@ -94,6 +107,7 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         print('DATA HERE', data)
 
         self.assertEqual(res.status_code, 401)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'bearer keyword not found')
         self.assertEqual(data['message']['description'],
                          'The bearer keyword was not '
@@ -110,6 +124,7 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
 
@@ -123,6 +138,7 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
 
@@ -135,5 +151,8 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
 
         print('Data', data)
         self.assertEqual(res.status_code, 403)
+        self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
+
+
