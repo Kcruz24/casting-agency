@@ -1,8 +1,7 @@
 import os
 import sys
 
-from flask import Flask, flash, abort, request, \
-    jsonify
+from flask import Flask, flash, abort, request, jsonify
 from flask_cors import CORS
 
 from backend.auth.auth import requires_auth, AuthError
