@@ -40,6 +40,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
             self.db = SQLAlchemy()
             self.db.init_app(self.app)
             self.db.create_all()
+            print('metadata from test: ', self.db.metadata.tables)
 
     def test_can_view_actors(self):
         res = self.client().get('/actors',
