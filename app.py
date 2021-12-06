@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, flash, abort, request, jsonify
+from flask import Flask, flash, abort, request, jsonify, render_template
 from flask_cors import CORS
 
 from backend.auth.auth import requires_auth, AuthError
@@ -30,10 +30,12 @@ def create_app(test_config=None):
 
     @app.route('/')
     def home():
-        return jsonify({
-            'success': True,
-            'home_route': True
-        })
+        return render_template('index.html')
+    # def home():
+    #     return jsonify({
+    #         'success': True,
+    #         'home_route': True
+    #     })
 
     @app.route('/actors')
     @requires_auth('get:actors')
