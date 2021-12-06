@@ -28,14 +28,14 @@ def create_app(test_config=None):
 
         return res
 
+    # def home():
+    #     return render_template('index.html')
     @app.route('/')
     def home():
-        return render_template('index.html')
-    # def home():
-    #     return jsonify({
-    #         'success': True,
-    #         'home_route': True
-    #     })
+        return jsonify({
+            'success': True,
+            'home_route': True
+        })
 
     @app.route('/actors')
     @requires_auth('get:actors')
