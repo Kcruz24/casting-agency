@@ -8,11 +8,12 @@ database_password = config('PASSWORD')
 database_name = 'casting_agency_test'
 database_host = 'localhost:5432'
 
-database_path = "postgresql://{}:{}@{}/{}".format(database_username,
-                                                  database_password,
-                                                  database_host,
-                                                  database_name)
+# database_path = "postgresql://{}:{}@{}/{}".format(database_username,
+#                                                   database_password,
+#                                                   database_host,
+#                                                   database_name)
 
+database_path = config('DATABASE_URL')
 db = SQLAlchemy()
 SECRET_KEY = os.urandom(32)
 
