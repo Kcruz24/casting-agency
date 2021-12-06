@@ -27,7 +27,7 @@ class TestExecutiveProducerRoleActorsEndpoints(TestCase):
                                                                self.db_name)
 
         self.actor = {
-            'name': 'Testing Executive Name',
+            'name': 'Testing Executive Name 2',
             'age': 39,
             'gender': 'male'
         }
