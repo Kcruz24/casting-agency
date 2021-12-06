@@ -1,7 +1,7 @@
 import os
 import sys
 
-from flask import Flask, flash, abort, request, jsonify
+from flask import Flask, flash, abort, request, jsonify, render_template
 from flask_cors import CORS
 
 from backend.auth.auth import requires_auth, AuthError
@@ -30,10 +30,19 @@ def create_app(test_config=None):
 
     @app.route('/')
     def home():
+        return render_template('index.html')
+
+    @app.route('/public')
+    def public():
         return jsonify({
             'success': True,
-            'home_route': True
+            'public': True,
+            'description': 'Everyone can view this response!'
         })
+
+    @app.route('/view-actors')
+    def view_actors():
+        return render_template('pages/actors.html')
 
     @app.route('/actors')
     @requires_auth('get:actors')
