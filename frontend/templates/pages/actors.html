@@ -3,11 +3,46 @@
 {% block content %}
     <h1>Showing all Actors available!</h1>
 
-    {% for actor in actors %}
-        <ul>
-            <li>{{ actor.name }}, {{ actor.age }} years old.</li>
-        </ul>
-    {% endfor %}
+    <h3>Actors</h3>
+    <ul id="actors"></ul>
+
+
 
     <h5><a href="/">Back</a></h5>
+
+    <script>
+        const fetchActors = async () => {
+            try {
+                const res = await fetch('/actors');
+                console.log('Response', res)
+                const data = await res.json();
+                console.log('All data:', data)
+
+                for (const actor of data.actors) {
+                    console.log(actor.name)
+                }
+
+                return data
+
+            } catch (e) {
+                console.log('Se jodio esta mierda');
+            }
+        }
+
+        const actors = document.querySelector("#actors");
+
+        const displayActors = async () => {
+            let getActors = await fetchActors();
+            console.log('Get Actors', getActors)
+            for (const actor of getActors.actors) {
+                const newLi = document.createElement('LI');
+                newLi.append(actor.name);
+                actors.append(newLi);
+                console.log(actor)
+            }
+        }
+
+        displayActors();
+    </script>
+
 {% endblock %}
