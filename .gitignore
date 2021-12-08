@@ -1,5 +1,5 @@
 venv/
 .idea/
 __pycache__/
-.env
-docs.txt
+markdown-cheat-sheet.md
+uris_and_curl.txt
