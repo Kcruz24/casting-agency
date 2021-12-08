@@ -3,3 +3,4 @@ venv/
 __pycache__/
 markdown-cheat-sheet.md
 uris_and_curl.txt
+.env
