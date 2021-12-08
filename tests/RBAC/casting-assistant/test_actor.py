@@ -1,4 +1,5 @@
 import json
+import unittest
 from unittest import TestCase
 
 from decouple import config
@@ -156,3 +157,5 @@ class TestCastingAssistantRoleActorsEndpoints(TestCase):
         self.assertEqual(data['message']['description'], 'Permission not found')
 
 
+if __name__ == '__main__':
+    unittest.main()

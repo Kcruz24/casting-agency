@@ -1,4 +1,5 @@
 import json
+import unittest
 from unittest import TestCase
 
 from decouple import config
@@ -143,3 +144,7 @@ class TestCastingDirectorRoleActorsEndpoints(TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource Not Found')
+
+
+if __name__ == '__main__':
+    unittest.main()

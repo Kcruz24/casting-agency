@@ -118,3 +118,7 @@ class TestCastingDirectorRoleMoviesEndpoints(TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
+
+
+if __name__ == '__main__':
+    unittest.main()

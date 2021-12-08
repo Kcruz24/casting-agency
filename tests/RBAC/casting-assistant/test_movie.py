@@ -1,4 +1,5 @@
 import json
+import unittest
 from unittest import TestCase
 
 from decouple import config
@@ -133,3 +134,7 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
+
+
+if __name__ == '__main__':
+    unittest.main()
