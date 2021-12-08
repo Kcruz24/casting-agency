@@ -1,6 +1,5 @@
 # Casting Agency
 
----
 
 ### Description
 This is Udacity's Full Stack Web Dev Nanodegree capstone project. The project
@@ -37,7 +36,6 @@ and structured to follow the REST arquitectural style.
 
 ## Getting Started
 
----
 
 ### Local Development
 The instructions below will guide you through the process of running the 
