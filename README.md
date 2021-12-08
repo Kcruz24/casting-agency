@@ -131,19 +131,14 @@ kill <PID>
 ### Step 2: Create and Populate the database
 1. **Setup**
 
-   Create an environment file, for example a .env file at the root folder 
-   to store the database URI. The database URI should look something 
-   like this in the environment file:
+   In the .env file at the root folder change these variables values 
+   to match yours:
+
     ```python
-    DATABASE_URI=postgresql://<database username>:<database password>@localhost:5432/casting_agency_test
+    PASSWORD=<your database password>
+    DATABASE_URI=postgresql://<your database username>:<your database password>@localhost:5432/casting_agency_test
     ```
-    Just replace "database username" with your own database username and 
-    "database password" with your own password as well.
-
-    Note that the variable "DATABASE_URI" in the environment file is very 
-    important in order for the app to work.
-
-
+   
 2. **Create the database**
   
     In your terminal, naviate to the `/backend/database` directory path and run
@@ -215,7 +210,7 @@ endpoints of the role.
 
 
 ### Running Tests
-
+* Upcoming...
 
 
 
