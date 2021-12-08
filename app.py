@@ -12,8 +12,7 @@ from backend.database.setup import setup_db
 
 def create_app(test_config=None):
     # create and configure the app
-    template_dir = os.path.abspath('frontend/templates')
-    app = Flask(__name__, template_folder=template_dir)
+    app = Flask(__name__)
     setup_db(app)
 
     CORS(app, resources={r"*": {"origins": "*"}})
@@ -28,8 +27,6 @@ def create_app(test_config=None):
 
         return res
 
-    # def home():
-    #     return render_template('index.html')
     @app.route('/')
     def home():
         return jsonify({
@@ -100,20 +97,9 @@ def create_app(test_config=None):
 
             body = request.get_json()
 
-            if body.get('name') is None:
-                actor.name = old_actor.name
-            else:
-                actor.name = body.get('name')
-
-            if body.get('age') is None:
-                actor.age = old_actor.age
-            else:
-                actor.age = body.get('age')
-
-            if body.get('gender') is None:
-                actor.gender = old_actor.gender
-            else:
-                actor.gender = body.get('gender')
+            actor.name = body.get('name', old_actor.name)
+            actor.age = body.get('age', old_actor.age)
+            actor.gender = body.get('gender', old_actor.gender)
 
             actor.update()
 
@@ -199,15 +185,9 @@ def create_app(test_config=None):
 
             body = request.get_json()
 
-            if body.get('title') is None:
-                movie.title = old_movie.title
-            else:
-                movie.title = body.get('title')
-
-            if body.get('release_date') is None:
-                movie.release_date = old_movie.release_date
-            else:
-                movie.release_date = body.get('release_date')
+            movie.title = body.get('title', old_movie.title)
+            movie.release_date = body.get('release_date',
+                                          old_movie.release_date)
 
             movie.update()
 
@@ -287,4 +267,4 @@ def create_app(test_config=None):
 
 app = create_app()
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080, debug=True)
+    app.run()
