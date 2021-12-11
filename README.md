@@ -1,5 +1,14 @@
 # Casting Agency
 
+## Motivation
+What motivated me to do this project was the opportunity to put into practice all
+that I have learned in the Full Stack Web Dev nanodegree program from Udacity. I created a stand-alone REST API
+which I'm proud of, and I learned more about the authentication side in this 
+project. At the time I only did the REST API without a front-end because I'm busy
+with other things, but I will be getting back to this and add the frontend as well as
+some other features that I have in mind. Overall, I really liked this experience,
+and I would do it again. In fact, I have some projects in mind that I want to do
+that will be possible thanks to what I learned in this nanodegree program.
 
 ### Description
 This is Udacity's Full Stack Web Dev Nanodegree capstone project. The project
@@ -24,13 +33,23 @@ As mentioned above, there are three roles which each has a particular set of
 credentials. The RBAC (Role Based Access Control) and the 
 authentication side was done using [Auth0](https://auth0.com/). 
 
-The backend was built with Python utilizing the Flask micro framework. The code
-implementation includes basic error handling and testing with Python unittests 
+The backend was built with [Python](https://www.python.org) utilizing the [Flask](https://flask.palletsprojects.com/en/2.0.x/) micro framework. The code
+implementation includes basic error handling and testing with Python [unittests](https://docs.python.org/3/library/unittest.html) 
 (All the errors are formatted to be returned as JSON objects as well as the
 endpoints). The API performs all CRUD operations and was 
 lauched and deployed using [Heroku](https://heroku.com). The jwt token
 provided by [Auth0](https://auth0.com/) is decoded and verified in the backend.
 
+### Tech Stack
+* [Python](https://www.python.org) with [Flask](https://flask.palletsprojects.com/en/2.0.x/)
+  * Flask-Cors
+  * Flask-Gunicorn
+  * Flask-Migrate
+  * Flask-RESTful
+  * Flask-SQLAlchemy
+* [PostgreSQL](https://www.postgresql.org)
+* [Heroku](https://heroku.com)
+* [Auth0](https://auth0.com/)
 
 ### Code Style
 The backend follows all the PEP8 code style guidelines. The endpoints were planned
@@ -54,7 +73,7 @@ application locally on your machine.
   > python --version
   
   # For pip:
-  > pip --version
+  > pip3 --version
   
   # For Node:
   > node --version
@@ -86,7 +105,7 @@ application locally on your machine.
 * **Install depencies**. From the backend folder run:
 
   ```py
-  pip install -r requirements.txt
+  pip3 install -r requirements.txt
   ```
 ### Step 1: Start/Stop the PostgreSQL server.
 Mac users can follow the command below:
