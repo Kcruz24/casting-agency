@@ -5,7 +5,7 @@ from unittest import TestCase
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from backend.app import create_app
+from app import create_app
 from backend.database.setup import setup_db
 
 
