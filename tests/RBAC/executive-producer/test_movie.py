@@ -5,10 +5,8 @@ from unittest import TestCase
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+from backend.app import create_app
 from backend.database.setup import setup_db
-
-db_password = config('PASSWORD')
 
 
 class TestExecutiveProducerRoleMoviesEndpoints(TestCase):
@@ -17,14 +15,7 @@ class TestExecutiveProducerRoleMoviesEndpoints(TestCase):
         self.app = create_app()
         self.client = self.app.test_client
 
-        self.db_username = 'postgres'
-        self.db_host = 'localhost:5432'
-        self.db_name = 'casting_agency_test'
-
-        self.database_path = "postgresql://{}:{}@{}/{}".format(self.db_username,
-                                                               db_password,
-                                                               self.db_host,
-                                                               self.db_name)
+        self.database_path = config('DATABASE_URL')
 
         self.movie = {
             'title': 'Spectre',
@@ -110,18 +101,18 @@ class TestExecutiveProducerRoleMoviesEndpoints(TestCase):
         self.assertEqual(data['success'], False)
         self.assertEqual(data['message'], 'Resource Not Found')
 
-    # def test_delete_movie(self):
-    #     res = self.client().delete('/movies/6',
-    #                                headers={'Authorization': 'Bearer {}'.format(
-    #                                    self.executive_producer_token)
-    #                                })
-    #     data = json.loads(res.data)
-    #
-    #     self.assertEqual(res.status_code, 200)
-    #     self.assertEqual(data['success'], True)
-    #     self.assertTrue(data['deleted_movie'])
-    #     self.assertTrue(data['number_of_movies_before'])
-    #     self.assertTrue(data['number_of_movies_after'])
+    def test_delete_movie(self):
+        res = self.client().delete('/movies/6',
+                                   headers={'Authorization': 'Bearer {}'.format(
+                                       self.executive_producer_token)
+                                   })
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data['success'], True)
+        self.assertTrue(data['deleted_movie'])
+        self.assertTrue(data['number_of_movies_before'])
+        self.assertTrue(data['number_of_movies_after'])
 
     def test_422_cannot_delete_movie(self):
         res = self.client().delete('/movies/600',
