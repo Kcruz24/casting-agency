@@ -4,7 +4,7 @@ from unittest import TestCase
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+from backend.app import create_app
 from backend.database.models.movie import Movie
 from backend.database.setup import setup_db
 
