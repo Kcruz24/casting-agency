@@ -1,7 +1,7 @@
 from flask_migrate import Migrate, MigrateCommand
 from flask_script import Manager
 
-import app
+from backend import app
 from backend.database.setup import db
 
 
