@@ -5,11 +5,8 @@ from unittest import TestCase
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
-from backend.database.models.actor import Actor
+from backend.app import create_app
 from backend.database.setup import setup_db
-
-db_password = config('PASSWORD')
 
 
 class TestCastingDirectorRoleActorsEndpoints(TestCase):
@@ -18,14 +15,7 @@ class TestCastingDirectorRoleActorsEndpoints(TestCase):
         self.app = create_app()
         self.client = self.app.test_client
 
-        self.db_username = 'postgres'
-        self.db_host = 'localhost:5432'
-        self.db_name = 'casting_agency_test'
-
-        self.database_path = "postgresql://{}:{}@{}/{}".format(self.db_username,
-                                                               db_password,
-                                                               self.db_host,
-                                                               self.db_name)
+        self.database_path = config('DATABASE_URL')
 
         self.actor = {
             'name': 'Testing Name actor',
@@ -72,11 +62,8 @@ class TestCastingDirectorRoleActorsEndpoints(TestCase):
                                  }, json=self.actor)
         data = json.loads(res.data)
 
-        actor = Actor.query.filter_by(name=self.actor['name']).one_or_none()
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(actor)
         self.assertTrue(data['created'])
         self.assertTrue(data['new_actor'])
 
@@ -98,11 +85,8 @@ class TestCastingDirectorRoleActorsEndpoints(TestCase):
                                   }, json={'name': 'casting director'})
         data = json.loads(res.data)
 
-        actor = Actor.query.filter_by(name='casting director')
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(actor)
         self.assertTrue(data['actor_before'])
         self.assertTrue(data['modified_actor'])
 
@@ -124,11 +108,8 @@ class TestCastingDirectorRoleActorsEndpoints(TestCase):
                                    })
         data = json.loads(res.data)
 
-        deleted_actor = Actor.query.filter_by(id=27).one_or_none()
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertEqual(deleted_actor, None)
         self.assertTrue(data['deleted_actor_id'])
         self.assertTrue(data['deleted_actor'])
         self.assertTrue(data['number_of_actors_before'])

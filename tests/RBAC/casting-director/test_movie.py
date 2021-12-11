@@ -1,14 +1,12 @@
 import json
+import unittest
 from unittest import TestCase
 
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
-from backend.database.models.movie import Movie
+from backend.app import create_app
 from backend.database.setup import setup_db
-
-db_password = config('PASSWORD')
 
 
 class TestCastingDirectorRoleMoviesEndpoints(TestCase):
@@ -18,14 +16,7 @@ class TestCastingDirectorRoleMoviesEndpoints(TestCase):
         self.client = self.app.test_client
         self.app.app_context().push()
 
-        self.db_username = 'postgres'
-        self.db_host = 'localhost:5432'
-        self.db_name = 'casting_agency_test'
-
-        self.database_path = "postgresql://{}:{}@{}/{}".format(self.db_username,
-                                                               db_password,
-                                                               self.db_host,
-                                                               self.db_name)
+        self.database_path = config('DATABASE_URL')
 
         self.movie = {
             'title': 'Spectre',
@@ -71,12 +62,7 @@ class TestCastingDirectorRoleMoviesEndpoints(TestCase):
                                  }, json=self.movie)
         data = json.loads(res.data)
 
-        print('Data', data)
-
-        movie = Movie.query.filter_by(title=self.movie['title']).one_or_none()
-
         self.assertEqual(res.status_code, 403)
-        self.assertEqual(movie, None)
         self.assertEqual(data['success'], False)
         self.assertTrue(data['message']['code'], 'Forbidden')
         self.assertTrue(data['message']['description'], 'Permission not found')
@@ -88,11 +74,8 @@ class TestCastingDirectorRoleMoviesEndpoints(TestCase):
                                   }, json={'title': 'casting director movie'})
         data = json.loads(res.data)
 
-        movie = Movie.query.filter_by(title='casting director movie')
-
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
-        self.assertTrue(movie)
         self.assertTrue(data['old_movie'])
         self.assertTrue(data['modified_movie'])
 
