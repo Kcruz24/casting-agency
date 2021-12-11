@@ -2,12 +2,13 @@ import json
 from functools import wraps
 from urllib.request import urlopen
 
-from flask import request, abort
+from decouple import config
+from flask import request
 from jose import jwt
 
-AUTH0_DOMAIN = 'kcruz.us.auth0.com'
-ALGORITHMS = ['RS256']
-API_AUDIENCE = 'casting-agency'
+AUTH0_DOMAIN = config('AUTH0_DOMAIN')
+ALGORITHMS = config('ALGORITHMS')
+API_AUDIENCE = config('API_AUDIENCE')
 
 
 class AuthError(Exception):
