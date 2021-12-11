@@ -1,10 +1,12 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String, Date
+from backend.entitites.model import Model
 
-db = SQLAlchemy()
 
+class Movie(Model):
+    id: int
+    title: String
+    release_date: Date
 
-class Movie(db.Model):
     __tablename__ = 'movies'
 
     id = Column(Integer, primary_key=True)
@@ -14,18 +16,6 @@ class Movie(db.Model):
     def __init__(self, title, release_date):
         self.title = title
         self.release_date = release_date
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    @staticmethod
-    def update():
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         return {

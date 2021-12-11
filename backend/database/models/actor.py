@@ -1,10 +1,14 @@
-from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import Column, Integer, String
 
-db = SQLAlchemy()
+from backend.entitites.model import Model
 
 
-class Actor(db.Model):
+class Actor(Model):
+    id: int
+    name: String
+    age: int
+    gender: String
+
     __tablename__ = 'actors'
 
     id = Column(Integer, primary_key=True)
@@ -16,18 +20,6 @@ class Actor(db.Model):
         self.name = name
         self.age = age
         self.gender = gender
-
-    def insert(self):
-        db.session.add(self)
-        db.session.commit()
-
-    @staticmethod
-    def update():
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
 
     def format(self):
         return {
