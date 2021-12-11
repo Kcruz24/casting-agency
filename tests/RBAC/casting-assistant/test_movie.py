@@ -5,10 +5,8 @@ from unittest import TestCase
 from decouple import config
 from flask_sqlalchemy import SQLAlchemy
 
-from app import create_app
+from backend.app import create_app
 from backend.database.setup import setup_db
-
-db_password = config('PASSWORD')
 
 
 class TestCastingAssistantRoleMoviesEndpoints(TestCase):
@@ -17,14 +15,7 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
         self.app = create_app()
         self.client = self.app.test_client
 
-        self.db_username = 'postgres'
-        self.db_host = 'localhost:5432'
-        self.db_name = 'casting_agency_test'
-
-        self.database_path = "postgresql://{}:{}@{}/{}".format(self.db_username,
-                                                               db_password,
-                                                               self.db_host,
-                                                               self.db_name)
+        self.database_path = config('DATABASE_URL')
 
         self.movie = {
             'title': 'Endgame',
@@ -40,16 +31,12 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
             self.db.init_app(self.app)
             self.db.create_all()
 
-    # ##################### MOVIES TESTS WITH AUTH #####################
-
     def test_can_view_movies(self):
         res = self.client().get('/movies',
                                 headers={'Authorization': 'Bearer {}'.format(
                                     self.casting_assistant_token)
                                 })
         data = json.loads(res.data)
-
-        print('DATA HERE:', data)
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data['success'], True)
@@ -59,8 +46,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
     def test_401_authorization_not_present_in_headers(self):
         res = self.client().get('/movies')
         data = json.loads(res.data)
-
-        print('Data:', data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['message']['code'],
@@ -75,8 +60,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
                                 })
         data = json.loads(res.data)
 
-        print('DATA HERE', data)
-
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['message']['code'], 'header_malformed')
         self.assertEqual(data['message']['description'],
@@ -88,8 +71,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
                                     self.casting_assistant_token)
                                 })
         data = json.loads(res.data)
-
-        print('DATA HERE', data)
 
         self.assertEqual(res.status_code, 401)
         self.assertEqual(data['message']['code'], 'bearer keyword not found')
@@ -105,7 +86,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
                                  json=self.movie)
         data = json.loads(res.data)
 
-        print('Data', data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
@@ -118,7 +98,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
                                   json={'name': 'John'})
         data = json.loads(res.data)
 
-        print('Data', data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
@@ -130,7 +109,6 @@ class TestCastingAssistantRoleMoviesEndpoints(TestCase):
                                    })
         data = json.loads(res.data)
 
-        print('Data', data)
         self.assertEqual(res.status_code, 403)
         self.assertEqual(data['message']['code'], 'Forbidden')
         self.assertEqual(data['message']['description'], 'Permission not found')
