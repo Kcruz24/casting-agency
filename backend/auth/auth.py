@@ -63,10 +63,8 @@ def check_permissions(permission, payload):
 def verify_decode_jwt(token):
     json_url = urlopen(f'https://{AUTH0_DOMAIN}/.well-known/jwks.json')
     jwks = json.loads(json_url.read())
-    print('This is jwks:', jwks)
 
     unverified_header = jwt.get_unverified_header(token)
-    print('Unverified header:', unverified_header)
 
     rsa_key = {}
     if 'kid' not in unverified_header:
@@ -94,9 +92,6 @@ def verify_decode_jwt(token):
                 audience=API_AUDIENCE,
                 issuer=f'https://{AUTH0_DOMAIN}/'
             )
-
-            for key, value in payload.items():
-                print(key, ': ', value)
 
             print('Passed verify_decode_jwt')
 
