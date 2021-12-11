@@ -3,7 +3,7 @@
 
 ### Description
 This is Udacity's Full Stack Web Dev Nanodegree capstone project. The project
-is about a Casting Agency API where you can access some of the following 
+is about a Casting Agency REST API where you can access some of the following 
 information based on your authentication credentials:
 
 * The **Casting Assistant** role can:
@@ -27,8 +27,10 @@ authentication side was done using [Auth0](https://auth0.com/).
 The backend was built with Python utilizing the Flask micro framework. The code
 implementation includes basic error handling and testing with Python unittests 
 (All the errors are formatted to be returned as JSON objects as well as the
-endpoints). The API performs all CRUD operations and the jwt token
+endpoints). The API performs all CRUD operations and was 
+lauched and deployed using [Heroku](https://heroku.com). The jwt token
 provided by [Auth0](https://auth0.com/) is decoded and verified in the backend.
+
 
 ### Code Style
 The backend follows all the PEP8 code style guidelines. The endpoints were planned
@@ -139,7 +141,7 @@ kill <PID>
    
 2. **Create the database**
   
-    In your terminal, naviate to the `/backend/database` directory path and run
+    In your terminal, navigate to the `/backend/database` directory path and run
     the following commands:
   
     ```py
@@ -171,7 +173,7 @@ kill <PID>
    
 ### Step 3: Start the backend server
 
-  From the root directory run:
+  From the `/backend` directory run:
   ```py
   # Mac users
   export FLASK_APP=app
@@ -208,29 +210,375 @@ endpoints of the role.
 
 
 ### Running Tests
-* Upcoming...
+Currently, the only way to run the tests available in this project is through
+  [PyCharm](https://www.jetbrains.com/pycharm/) or some other smart IDE.
+If you have already downloaded [PyCharm](https://www.jetbrains.com/pycharm/)
+  then in order to run the tests do the following:
+
+1. Find the test that you want to run under the `/tests` directory.
+2. Before going to the next step, make sure you have set your 'DATABASE_URL' correctly in your .env file,
+otherwise the test will fail.
+3. Then in the python file, press the 'play' button circled below: 
+
+    <img src="https://res.cloudinary.com/kcruzcloud/image/upload/v1639187297/image-example-for-running-tests-in-PyCharm.png" width="600">
+
+4. That button will run all the tests in the current python file.
+
+If you want to run a specific test individually, you can do so by searching for 
+the specific function inside the python test file that you want and then following 
+the step #2 above.
+---
+
+## API Reference
+
+### Getting Started
+* **Base URL**: http://kcruz-casting-agency.herokuapp.com
+* **Authentication**:
+    If you want to gain access to the endpoints you can email me to
+[kocruz.24@gmail.com](https://gmail.com) with the subject "Casting Agency Auth Access"
+and the role you want to test. I'll send you back the respective bearer token so that
+you can replace it below and gain access to the corresponding
+endpoints of the role.
+
+### Error Handling
+Errors are returned as JSON objects in the following format:
+``` py
+{
+    "success": False, 
+    "error": 404,
+    "message": "Resource not found"
+}
+```
+
+The API will return these error types when requests fail:
+* `404: Resource Not Found`
+* `422: Unprocessable Entity`
+* `405: Method Not Allowed`
+* `401: Authorization not present in headers`
+* `401: header_malformed`
+* `401: bearer keyword not found`
+* `401: invalid_header`
+* `401: token_expired`
+* `400: invalid_claims`
+* `403: Forbidden`
+* `500: Internal Server Error`
+
+## Endpoints
+
+### Home Route
+
+#### GET `/`
+
+* General:
+  * Returns a success value and home route message to confirm that
+    everything is working properly.
+  
+
+* Sample: `curl http://kcruz-casting-agency.herokuapp.com | python -m json.tool`
+* Response:
+  ```json
+  {
+      "home_route": true,
+      "success": true
+  }
+  ```
+  
+### Actors
+  
+#### GET `/actors`
+
+* General:
+  * Returns a list of actors, the quantity of available actors and a success
+    value.
+  
+
+  * Sample: 
+    ```js
+     curl -r GET \
+          --url 'http://kcruz-casting-agency.herokuapp.com/actors' \
+          -H 'Authorization: Bearer {token}' \
+          -H 'Content-Type: application/json' | python -m json.tool
+    ```
+    
+
+  * Response:
+    ```json
+    {
+        "actors": [
+            {
+                "age": 22,
+                "gender": "male",
+                "id": 1,
+                "name": "Kevin"
+            },
+            {
+                "age": 21,
+                "gender": "male",
+                "id": 3,
+                "name": "Diego"
+            },
+            {
+                "age": 32,
+                "gender": "male",
+                "id": 5,
+                "name": "Daniel"
+            },
+            {
+                "age": 31,
+                "gender": "male",
+                "id": 6,
+                "name": "Miguel"
+            }
+        ],
+        "all_actors": 4,
+        "success": true
+    }
+    ```
+
+#### POST `/actors`
+
+* General:
+  * Returns a success value, the newly created actor id, and the actor object
+    itself.
 
 
+* Sample:
+    ```js
+    curl -r POST \
+         --url 'http://kcruz-casting-agency.herokuapp.com/actors' \
+         -H 'Authorization: Bearer {token}' \
+         -H 'Content-Type: application/json' \
+         -d '{
+                "name": "some name",
+                "age": 23,
+                "gender": "other"
+              }' | python -m json.tool
+    ```
+* Response:
+    ```json 
+    {
+        "created": 39,
+        "new_actor": {
+            "age": 23,
+            "gender": "other",
+            "id": 39,
+            "name": "some name"
+        },
+        "success": true
+    }
+    ```
+
+#### PATCH `/actors/{id}`
+
+* General:
+  * Returns an actor object before modification, the actor object after 
+    the modifications, and a success value.
 
 
+* Sample:
+    ```js
+    curl --request PATCH \
+         --url 'http://kcruz-casting-agency.herokuapp.com/actors/38' \
+         -H 'Authorization: Bearer {token}' \
+         -H 'Content-Type: application/json' \
+         -d '{
+                "name": "modified name",
+                "age": 40,
+                "gender": "female"
+             }' | python -m json.tool
+    ```
+  
+* Response:
+    ```json 
+    {
+        "actor_before": {
+            "age": 21,
+            "gender": "other",
+            "id": 38,
+            "name": "some name"
+        },
+        "modified_actor": {
+            "age": 40,
+            "gender": "female",
+            "id": 38,
+            "name": "modified name"
+        },
+        "success": true
+    }
+    ```
+
+#### DELETE `/actors/{id}`
+
+* General:
+  * Returns the deleted actor id, the deleted actor object, 
+    the quantity of actors before deleting the current actor, the quantity
+    after deletion, and a success value.
 
 
+* Sample:
+    ```js
+    curl --request DELETE \
+         --url 'http://kcruz-casting-agency.herokuapp.com/actors/38' \
+         -H 'Authorization: Bearer {token}' \
+         -H 'Content-Type: application/json' | python -m json.tool
+    ```
+  
+* Response:
+    ```json
+    {
+        "deleted_actor": {
+            "age": 40,
+            "gender": "female",
+            "id": 38,
+            "name": "modified name"
+        },
+        "deleted_actor_id": 38,
+        "number_of_actors_after": 18,
+        "number_of_actors_before": 19,
+        "success": true
+    }
+    ```
+
+### Movies
+
+#### GET `/movies`
+
+* General:
+  * Returns a list of movies, the quantity of available movies and a success
+    value.
+  
+
+* Sample: 
+  ```js
+   curl -r GET \
+        --url 'http://kcruz-casting-agency.herokuapp.com/movies' \
+        -H 'Authorization: Bearer {token}' \
+        -H 'Content-Type: application/json' | python -m json.tool
+  ```
+
+* Response:
+    ```json 
+    {
+        "all_movies": 4,
+        "movies": [
+            {
+                "id": 1,
+                "release_date": "Fri, 20 Oct 2006 00:00:00 GMT",
+                "title": "The Prestige"
+            },
+            {
+                "id": 7,
+                "release_date": "Tue, 01 Sep 2009 00:00:00 GMT",
+                "title": "Spider-Man 3"
+            },
+            {
+                "id": 13,
+                "release_date": "Sun, 07 Nov 2021 00:00:00 GMT",
+                "title": "Spectre"
+            },
+            {
+                "id": 14,
+                "release_date": "Sun, 07 Nov 2021 00:00:00 GMT",
+                "title": "Spectre"
+            }
+        ],
+        "success": true
+    }
+    ```
+
+#### POST `/movies`
+
+* General:
+  * Returns a success value, the newly created movie id, and the movie object
+    itself.
 
 
+* Sample:
+    ```js
+    curl -r POST \
+         --url 'http://kcruz-casting-agency.herokuapp.com/movies' \
+         -H 'Authorization: Bearer {token}' \
+         -H 'Content-Type: application/json' \
+         -d '{
+                 "title": "some movie title",
+                 "release_date": "2024-12-23"
+             }' | python -m json.tool
+    ```
+  
+* Response:
+    ```json
+    {
+        "created_id": 15,
+        "new_movie": {
+            "id": 15,
+            "release_date": "Mon, 23 Dec 2024 00:00:00 GMT",
+            "title": "some movie title"
+        },
+        "success": true
+    }
+    ```
+
+#### PATCH `/movies/{id}`
+
+* General:
+  * Returns an movie object before modification, the movie object after 
+    the modifications, and a success value.
 
 
+* Sample:
+    ```js
+    curl --request PATCH \
+         --url 'http://kcruz-casting-agency.herokuapp.com/movies/15' \
+         -H 'Authorization: Bearer {token}' \
+         -H 'Content-Type: application/json' \
+         -d '{
+                 "title": "modified movie name"
+             }' | python -m json.tool
+    ```
+
+* Response:
+    ```json
+    {
+        "modified_movie": {
+            "id": 15,
+            "release_date": "Mon, 23 Dec 2024 00:00:00 GMT",
+            "title": "modified movie name"
+        },
+        "old_movie": {
+            "id": 15,
+            "release_date": "Mon, 23 Dec 2024 00:00:00 GMT",
+            "title": "some movie title"
+        },
+        "success": true
+    }
+    ```
+
+#### DELETE `/movies/{id}`
+
+* General:
+  * Returns the deleted actor id, the deleted movie object, 
+    the quantity of movies before deleting the current movie, the quantity
+    after deletion, and a success value.
 
 
+* Sample:
+  ```js
+  curl --request DELETE \
+       --url 'http://kcruz-casting-agency.herokuapp.com/movies/15' \
+       -H 'Authorization: Bearer {token}' \
+       -H 'Content-Type: application/json' | python -m json.tool
+  ```
 
-
-
-
-
-
-
-
-
-
-
-
-
+* Response:
+  ```json
+  {
+      "deleted_movie": {
+          "id": 15,
+          "release_date": "Mon, 23 Dec 2024 00:00:00 GMT",
+          "title": "modified movie name"
+      },
+      "number_of_movies_after": 4,
+      "number_of_movies_before": 5,
+      "success": true
+  }
+  ```
